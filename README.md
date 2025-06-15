@@ -12,7 +12,7 @@
 ## What this stack creates
 | Resource                | Purpose                              |
 |-------------------------|--------------------------------------|
-| `pihole` container      | DNS sinkhole + web UI on ports 53/80 |
+| `pihole` container      | DNS sinkhole + web UI on ports 53/8085 |
 | Volume `pihole_etc-pihole` | Pi-hole config, gravity DB        |
 | Volume `pihole_etc-dnsmasq.d` | custom dnsmasq configs        |
 
@@ -24,6 +24,30 @@ docker compose logs -f    # view logs
 docker compose down       # stop
 ```
 
-Access UI: `http://192.XXX.XXX.XXX/admin`  
+Access UI: `http://192.XXX.XXX.XXX:8085/admin`  
 Default login password: value of `WEBPASSWORD` in _docker-compose.yml_ (change it ASAP).
+
+# Troubleshooting
+## Update password : 
+// Inside shell :
+docker exec -it pihole bash
+
+// change web password
+pihole setpassword
+
+// update list
+pihole -g
+
+## networking
+// allow ufw to go thru port 53
+sudo ufw allow 53/tcp
+sudo ufw allow 53/udp
+sudo ufw allow 8085/tcp
+sudo ufw reload
+sudo ufw status
+
+# not listening to the WEB_PORT 
+// verify :
+sudo ss -tulnp | grep 8085
+
 

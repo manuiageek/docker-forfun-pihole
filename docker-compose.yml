@@ -2,11 +2,8 @@ services:
   pihole:
     container_name: pihole
     image: pihole/pihole:latest
-    hostname: pihole              
-    ports:
-      - "53:53/tcp"
-      - "53:53/udp"
-      - "80:80/tcp"
+    hostname: pihole     
+    network_mode: host         
     environment:
       TZ: "Pacific/Tahiti"           
       WEBPASSWORD: "password"      # to change
@@ -14,6 +11,7 @@ services:
       DNSMASQ_LISTENING: "all"
       DNS1: "1.1.1.1"
       DNS2: "1.0.0.1"      
+      FTLCONF_webserver_port: "8085"
     cap_add:
      - NET_ADMIN
     volumes:
